@@ -36,6 +36,13 @@ namespace Elmah2slack
         protected virtual void OnError(object sender, EventArgs args)
         {
             var application = (HttpApplication)sender;
+            var exceptionEventArgs = new ExceptionFilterEventArgs(application.Server.GetLastError(), new HttpContextWrapper(application.Context));
+            
+            Filtering?.Invoke(this, exceptionEventArgs);
+
+            if (exceptionEventArgs.Dismissed)
+                return;
+
             var slackClient = new SlackClient(Settings.WebhookUrl);
             var slackMessage = new SlackMessage
             {
