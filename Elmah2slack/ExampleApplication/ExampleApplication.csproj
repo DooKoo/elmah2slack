@@ -26,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -260,10 +261,6 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Elmah.Mvc\Elmah.Mvc.csproj">
-      <Project>{6b480486-4311-43aa-add8-25ce2033d166}</Project>
-      <Name>Elmah.Mvc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Elmah2slack\Elmah2slack.csproj">
       <Project>{9fa80a4b-d193-4970-bf6d-51b3454fabc7}</Project>
       <Name>Elmah2slack</Name>

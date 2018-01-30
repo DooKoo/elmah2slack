@@ -1,5 +1,4 @@
-﻿using Elmah;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +8,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.IO;
 using Slack.Webhooks;
+using Elmah;
 
 namespace Elmah2slack
 {
@@ -36,31 +36,25 @@ namespace Elmah2slack
         protected virtual void OnError(object sender, EventArgs args)
         {
             var application = (HttpApplication)sender;
-            var url = "https://hooks.slack.com/services/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";
-            var slackClient = new SlackClient(url);
+            var slackClient = new SlackClient(Settings.WebhookUrl);
             var slackMessage = new SlackMessage
             {
-                Channel = "#demo",
+                Channel = Settings.ChannelName,
                 Text = application.Server.GetLastError().Message,
                 IconEmoji = Emoji.Computer,
-                Username = application.Server.MachineName
+                Username = application.Request.Url.AbsoluteUri
             };
-            try
+            slackMessage.Attachments = new List<SlackAttachment>
             {
-                slackMessage.Attachments = new List<SlackAttachment>();
-                slackMessage.Attachments.Add(new SlackAttachment()
+                new SlackAttachment()
                 {
                     Title = "StackTrace",
                     Text = application.Server.GetLastError().StackTrace
-                });
-            }
-            catch(Exception w)
-            {
-                var o = 0;
-            }
+                }
+            };
 
             slackMessage.Mrkdwn = false;
-            slackClient.Post(slackMessage);
+            var result = slackClient.Post(slackMessage);
         }
     }
 }
